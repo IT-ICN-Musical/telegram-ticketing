@@ -6,7 +6,7 @@ import {
   init,
   LaunchParams,
 } from "@telegram-apps/sdk-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ import { Scan, User, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ACCESS_TOKEN_KEY } from "@/consts/local-storage.const";
 
-export default function Home() {
+function Home() {
   const [isSDKInitialized, setIsSDKInitialized] = useState<boolean>();
   const [qrAvailable, setQRAvailable] = useState(false);
   const [launchParams, setLaunchParams] = useState<LaunchParams>();
@@ -126,5 +126,13 @@ export default function Home() {
         </Button>
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense>
+      <Home />
+    </Suspense>
   );
 }
