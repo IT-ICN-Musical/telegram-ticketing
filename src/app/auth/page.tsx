@@ -1,14 +1,14 @@
 "use client";
 import { request } from "@/utils/request";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 type LoginResponse = {
   access_token: string;
   refresh_token: string;
 };
 
-export default function Page() {
+function PageContent() {
   // get init_data
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -42,4 +42,14 @@ export default function Page() {
       }
     })();
   }, [init_data, router]);
+
+  return <></>;
+}
+
+export default function Page() {
+  return (
+    <Suspense>
+      <PageContent />
+    </Suspense>
+  );
 }
