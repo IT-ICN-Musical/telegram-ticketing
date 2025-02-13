@@ -2,8 +2,6 @@ import {
   ACCESS_TOKEN_KEY,
   REFRESH_TOKEN_KEY,
 } from "@/consts/local-storage.const";
-import { TokenPair } from "@/types/token.type";
-import { getCookie } from "cookies-next/server";
 
 const MISSING_REFRESH_KEY_ERR = Error(
   "Missing refresh token key in the local storage"

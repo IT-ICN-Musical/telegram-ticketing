@@ -3,9 +3,6 @@ import { request } from "@/utils/request";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-type LoginRequest = {
-  init_raw_data: string;
-};
 type LoginResponse = {
   access_token: string;
   refresh_token: string;
@@ -25,10 +22,6 @@ export default function Page() {
   useEffect(() => {
     (async () => {
       try {
-        const body = {
-          init_raw_data: init_data,
-        };
-
         const resp = await request<LoginResponse>({
           method: "POST",
           path: "v2/auth/mini-app/login",
@@ -48,5 +41,5 @@ export default function Page() {
         alert(error);
       }
     })();
-  }, []);
+  }, [init_data, router]);
 }

@@ -53,7 +53,13 @@ export default function Home() {
         encodeURIComponent(launchParams?.initDataRaw ?? "");
       router.push(authUrl);
     }
-  }, [isSDKInitialized, qrAvailable, isAuthenticated]);
+  }, [
+    isSDKInitialized,
+    qrAvailable,
+    isAuthenticated,
+    router,
+    launchParams?.initDataRaw,
+  ]);
 
   const handleQRScan = async () => {
     if (!qrScanner.open.isAvailable()) return;

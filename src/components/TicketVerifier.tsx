@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { request } from "@/utils/request";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 export interface AttendanceTime {
   Time: string; // ISO string representation of the time (or default value)
@@ -170,17 +170,12 @@ function TicketContent({
 
 export default function TicketVerifier({ userTicketId }: TicketVerifierProps) {
   const router = useRouter();
-  const { invalidateQueries } = useQueryClient();
   const { data: ticket, refetch } = useQuery({
     queryFn: () => fetchTicket(userTicketId),
     staleTime: 1000 * 60 * 5,
     queryKey: ["ticket", userTicketId],
   });
-  const {
-    mutate,
-    isSuccess,
-    error: mutateError,
-  } = useMutation(Checkin, {
+  const { mutate, error: mutateError } = useMutation(Checkin, {
     onSuccess: () => {
       // hack ga bisa pakai invalidate queries
       refetch();
