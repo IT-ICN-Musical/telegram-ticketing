@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Scan, User, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ACCESS_TOKEN_KEY } from "@/consts/local-storage.const";
+import dynamic from "next/dynamic";
 
 function Home() {
   const [isSDKInitialized, setIsSDKInitialized] = useState<boolean>();
@@ -129,10 +130,14 @@ function Home() {
   );
 }
 
+const DynamicHome = dynamic(() => Promise.resolve(Home), {
+  ssr: false,
+});
+
 export default function Page() {
   return (
     <Suspense>
-      <Home />
+      <DynamicHome />
     </Suspense>
   );
 }
