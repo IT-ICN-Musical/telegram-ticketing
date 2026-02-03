@@ -20,18 +20,18 @@ export interface AttendanceTime {
   Valid: boolean;
 }
 
-export interface ViewersWithSeating {
-  viewer_id: string; // corresponds to uuid.UUID
-  order_id: string; // corresponds to uuid.UUID
-  ticket_id: string; // corresponds to uuid.UUID
-  name: string; // corresponds to string
-
-  checked_in_by: string | null; // may be null
-  attendance_time: AttendanceTime; // nested object with Time and Valid fields
-  created_at: string; // ISO timestamp string
-  show_name: string;
-  category: string;
+// v3 response type
+export interface TicketResponse {
+  ticketId: string;
+  orderId: string;
+  holderName: string;
+  showName: string;
+  hasCheckedIn: boolean;
+  checkedInAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
+
 export interface Ticket {
   id: string;
   timing: string;
@@ -48,7 +48,7 @@ interface TicketVerifierProps {
 
 async function Checkin(ticketId: string) {
   const res = await request<void>({
-    path: `v2/viewers/protected/${ticketId}/checkin`,
+    path: `api/v1/scanner/tickets/${ticketId}/checkin`,
     method: "POST",
     withAuth: true,
   });
@@ -62,8 +62,8 @@ async function Checkin(ticketId: string) {
 
 const fetchTicket = async (ticketId: string): Promise<Ticket> => {
   console.log(ticketId);
-  const res = await request<ViewersWithSeating>({
-    path: `v2/viewers/protected/${ticketId}/complete`,
+  const res = await request<TicketResponse>({
+    path: `api/v1/scanner/tickets/${ticketId}`,
     withAuth: true,
   });
   if (!res.success) {
@@ -71,17 +71,14 @@ const fetchTicket = async (ticketId: string): Promise<Ticket> => {
   }
 
   // map to ticket
-
   const ticket: Ticket = {
-    id: res.data.ticket_id,
-    timing: res.data.show_name,
-    category: res.data.category,
-    checked_in: res.data.attendance_time.Valid,
-    username: res.data.checked_in_by ?? "",
-    checkInDate: res.data.attendance_time.Valid
-      ? res.data.attendance_time.Time
-      : null,
-    name: res.data.name,
+    id: res.data.ticketId,
+    timing: res.data.showName,
+    category: "Standard", // v3 doesnt have category
+    checked_in: res.data.hasCheckedIn,
+    username: "", // v3 doesnt track who checked in
+    checkInDate: res.data.checkedInAt,
+    name: res.data.holderName,
   };
 
   return ticket;

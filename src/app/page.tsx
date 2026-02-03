@@ -84,7 +84,7 @@ function Home() {
       <div className="max-w-md mx-auto space-y-6">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold text-gray-900">
-            ICN 2025: SENJAKALA
+            ICN 2026: AMERTA
           </h1>
           <p className="text-xl text-gray-600">Ticket Scanner</p>
         </div>

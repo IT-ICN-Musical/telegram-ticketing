@@ -4,8 +4,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 
 type LoginResponse = {
-  access_token: string;
-  refresh_token: string;
+  token: string;
+  role: string;
 };
 
 function PageContent() {
@@ -24,17 +24,16 @@ function PageContent() {
       try {
         const resp = await request<LoginResponse>({
           method: "POST",
-          path: "v2/auth/mini-app/login",
+          path: "api/v1/auth/mini-app/login",
           body: {
-            init_raw_data: init_data,
+            initRawData: init_data,
           },
         });
 
         if (!resp.success) {
           router.push("/error?code=0");
         } else {
-          sessionStorage.setItem("accessToken", resp.data.access_token);
-          sessionStorage.setItem("refreshToken", resp.data.refresh_token);
+          sessionStorage.setItem("accessToken", resp.data.token);
           router.push("/");
         }
       } catch (error) {
